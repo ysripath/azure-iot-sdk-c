@@ -16,6 +16,7 @@ set(iothub_service_client_c_files
 ./src/iothub_messaging.c
 ./src/iothub_messaging_ll.c
 ./src/iothub_devicetwin.c
+./src/iothub_service_diagnostic.c
 ./src/iothub_devicemethod.c
 ./src/iothub_service_client_auth.c
 ./src/iothub_sc_version.c
@@ -28,6 +29,7 @@ set(iothub_service_client_h_files
 ./inc/iothub_messaging.h
 ./inc/iothub_messaging_ll.h
 ./inc/iothub_devicetwin.h
+./inc/iothub_service_diagnostic.h
 ./inc/iothub_devicemethod.h
 ./inc/iothub_service_client_auth.h
 ./inc/iothub_sc_version.h
