@@ -11,7 +11,7 @@
 #include "azure_c_shared_utility/buffer_.h"
 
 #include "internal/iothub_client_diagnostic.h"
-
+#ifdef INCLUDE_DIAGNOSTIC
 #define TIME_STRING_BUFFER_LEN 30
 
 static const int BASE_36 = 36;
@@ -197,3 +197,4 @@ int IoTHubClient_Diagnostic_AddIfNecessary(IOTHUB_DIAGNOSTIC_SETTING_DATA* diagS
 
     return result;
 }
+#endif

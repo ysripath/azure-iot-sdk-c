@@ -163,8 +163,6 @@ typedef struct MQTTTRANSPORT_HANDLE_DATA_TAG
 
     // Connection related constants
     STRING_HANDLE hostAddress;
-    STRING_HANDLE device_id;
-    STRING_HANDLE module_id;
     STRING_HANDLE devicesAndModulesPath;
     int portNum;
     bool conn_attempted;
@@ -309,8 +307,6 @@ static void free_transport_handle_data(MQTTTRANSPORT_HANDLE_DATA* transport_data
     STRING_delete(transport_data->devicesAndModulesPath);
     STRING_delete(transport_data->topic_MqttEvent);
     STRING_delete(transport_data->topic_MqttMessage);
-    STRING_delete(transport_data->device_id);
-    STRING_delete(transport_data->module_id);
     STRING_delete(transport_data->hostAddress);
     STRING_delete(transport_data->configPassedThroughUsername);
     STRING_delete(transport_data->topic_GetState);
@@ -716,6 +712,7 @@ static int addSystemPropertiesTouMqttMessage(IOTHUB_MESSAGE_HANDLE iothub_messag
 static int addDiagnosticPropertiesTouMqttMessage(IOTHUB_MESSAGE_HANDLE iothub_message_handle, STRING_HANDLE topic_string, size_t* index_ptr)
 {
     int result = 0;
+#ifdef INCLUDE_DIAGNOSTIC
     size_t index = *index_ptr;
 
     // Codes_SRS_IOTHUB_TRANSPORT_MQTT_COMMON_09_014: [ `IoTHubTransport_MQTT_Common_DoWork` shall check for the diagnostic properties including diagid and diagCreationTimeUtc and if found both add them as system property in the format of `$.diagid` and `$.diagctx` respectively]
@@ -777,6 +774,11 @@ static int addDiagnosticPropertiesTouMqttMessage(IOTHUB_MESSAGE_HANDLE iothub_me
             result = __FAILURE__;
         }
     }
+#else
+    (void)iothub_message_handle;
+    (void)topic_string;
+    (void)index_ptr;
+#endif
     return result;
 }
 
@@ -2081,7 +2083,7 @@ static int SendMqttConnectMsg(PMQTTTRANSPORT_HANDLE_DATA transport_data)
 
         STRING_HANDLE clientId;
 
-        clientId = buildClientId(STRING_c_str(transport_data->device_id), STRING_c_str(transport_data->module_id));
+        clientId = buildClientId(IoTHubClient_Auth_Get_DeviceId(transport_data->authorization_module), IoTHubClient_Auth_Get_ModuleId(transport_data->authorization_module));
         if (NULL == clientId)
         {
             LogError("Unable to allocate clientId");
@@ -2285,18 +2287,6 @@ static PMQTTTRANSPORT_HANDLE_DATA InitializeTransportHandleData(const IOTHUB_CLI
         else if ((state->retry_control_handle = retry_control_create(DEFAULT_RETRY_POLICY, DEFAULT_RETRY_TIMEOUT_IN_SECONDS)) == NULL)
         {
             LogError("Failed creating default retry control");
-            free_transport_handle_data(state);
-            state = NULL;
-        }
-        else if ((state->device_id = STRING_construct(upperConfig->deviceId)) == NULL)
-        {
-            LogError("failure constructing device_id.");
-            free_transport_handle_data(state);
-            state = NULL;
-        }
-        else if ((moduleId != NULL) && ((state->module_id = STRING_construct(moduleId)) == NULL))
-        {
-            LogError("failure constructing module_id.");
             free_transport_handle_data(state);
             state = NULL;
         }
@@ -2705,7 +2695,7 @@ int IoTHubTransport_MQTT_Common_Subscribe(IOTHUB_DEVICE_HANDLE handle)
     else
     {
         /* Code_SRS_IOTHUB_MQTT_TRANSPORT_07_016: [IoTHubTransport_MQTT_Common_Subscribe shall set a flag to enable mqtt_client_subscribe to be called to subscribe to the Message Topic.] */
-        transport_data->topic_MqttMessage = buildTopicMqttMessage(STRING_c_str(transport_data->device_id), STRING_c_str(transport_data->module_id));
+        transport_data->topic_MqttMessage = buildTopicMqttMessage(IoTHubClient_Auth_Get_DeviceId(transport_data->authorization_module), IoTHubClient_Auth_Get_ModuleId(transport_data->authorization_module));
         if (transport_data->topic_MqttMessage == NULL)
         {
             LogError("Failure constructing Message Topic");
@@ -3219,12 +3209,12 @@ IOTHUB_DEVICE_HANDLE IoTHubTransport_MQTT_Common_Register(TRANSPORT_LL_HANDLE ha
         else
         {
             // Codes_SRS_IOTHUB_MQTT_TRANSPORT_17_003: [ IoTHubTransport_MQTT_Common_Register shall return NULL if deviceId or deviceKey do not match the deviceId and deviceKey passed in during IoTHubTransport_MQTT_Common_Create.]
-            if (strcmp(STRING_c_str(transport_data->device_id), device->deviceId) != 0)
+            if (strcmp(IoTHubClient_Auth_Get_DeviceId(transport_data->authorization_module), device->deviceId) != 0)
             {
                 LogError("IoTHubTransport_MQTT_Common_Register: deviceId does not match.");
                 result = NULL;
             }
-            else if (!check_module_ids_equal(STRING_c_str(transport_data->module_id), device->moduleId))
+            else if (!check_module_ids_equal(IoTHubClient_Auth_Get_ModuleId(transport_data->authorization_module), device->moduleId))
             {
                 LogError("IoTHubTransport_MQTT_Common_Register: moduleId does not match.");
                 result = NULL;
@@ -3323,14 +3313,14 @@ int IoTHubTransport_MQTT_Common_Subscribe_InputQueue(IOTHUB_DEVICE_HANDLE handle
         LogError("Invalid handle parameter. NULL.");
         result = __FAILURE__;
     }
-    else if (transport_data->module_id == NULL)
+    else if (IoTHubClient_Auth_Get_ModuleId(transport_data->authorization_module) == NULL)
     {
         // Codes_SRS_IOTHUB_TRANSPORT_MQTT_COMMON_31_073: [ If module ID is not set on the transpont, IoTHubTransport_MQTT_Common_Unsubscribe_InputQueue shall fail.]
         LogError("ModuleID must be specified for input queues. NULL.");
         result = __FAILURE__;
     }
     else if ((transport_data->topic_InputQueue == NULL) &&
-        (transport_data->topic_InputQueue = STRING_construct_sprintf(TOPIC_INPUT_QUEUE_NAME, STRING_c_str(transport_data->device_id), STRING_c_str(transport_data->module_id))) == NULL)
+        (transport_data->topic_InputQueue = STRING_construct_sprintf(TOPIC_INPUT_QUEUE_NAME, IoTHubClient_Auth_Get_DeviceId(transport_data->authorization_module), IoTHubClient_Auth_Get_ModuleId(transport_data->authorization_module))) == NULL)
     {
         LogError("Failure constructing Message Topic");
         result = __FAILURE__;

@@ -21,6 +21,7 @@ extern "C" {
 #include <stddef.h>
 #endif
 
+#ifdef INCLUDE_DIAGNOSTIC
 /** @brief diagnostic related setting */
 typedef struct IOTHUB_DIAGNOSTIC_SETTING_DATA_TAG
 {
@@ -40,7 +41,7 @@ typedef struct IOTHUB_DIAGNOSTIC_SETTING_DATA_TAG
     * @return	0 upon success
     */
 MOCKABLE_FUNCTION(, int, IoTHubClient_Diagnostic_AddIfNecessary, IOTHUB_DIAGNOSTIC_SETTING_DATA *, diagSetting, IOTHUB_MESSAGE_HANDLE, messageHandle);
-
+#endif
 #ifdef __cplusplus
 }
 #endif
