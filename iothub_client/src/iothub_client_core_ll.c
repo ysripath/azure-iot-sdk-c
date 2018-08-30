@@ -1407,6 +1407,27 @@ IOTHUB_CLIENT_RESULT IoTHubClientCore_LL_SendEventAsync(IOTHUB_CLIENT_CORE_LL_HA
     return result;
 }
 
+IOTHUB_CLIENT_RESULT IoTHubClientCore_LL_SendEvent(IOTHUB_CLIENT_CORE_LL_HANDLE iotHubClientHandle, IOTHUB_MESSAGE_HANDLE eventMessageHandle)
+{
+    IOTHUB_CLIENT_RESULT result;
+    /*Codes_SRS_IOTHUBCLIENT_LL_02_011: [IoTHubClientCore_LL_SendEventAsync shall fail and return IOTHUB_CLIENT_INVALID_ARG if parameter iotHubClientHandle or eventMessageHandle is NULL.]*/
+    if (iotHubClientHandle == NULL || eventMessageHandle == NULL)
+    {
+        result = IOTHUB_CLIENT_INVALID_ARG;
+        LOG_ERROR_RESULT;
+    }
+    else
+    {
+        // Open connection if not already open
+            // IN PROTOCOL TRANSPORT
+            // Open 
+        // Send message to transport
+            // IN TRANSPORT
+        result = IOTHUB_CLIENT_INVALID_ARG;
+    }
+    return result;
+}
+
 IOTHUB_CLIENT_RESULT IoTHubClientCore_LL_SetMessageCallback(IOTHUB_CLIENT_CORE_LL_HANDLE iotHubClientHandle, IOTHUB_CLIENT_MESSAGE_CALLBACK_ASYNC messageCallback, void* userContextCallback)
 {
     IOTHUB_CLIENT_RESULT result;
