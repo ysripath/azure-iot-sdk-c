@@ -109,8 +109,10 @@ typedef struct IOTHUB_CLIENT_CORE_LL_HANDLE_DATA_TAG
     uint64_t current_device_twin_timeout;
     IOTHUB_CLIENT_DEVICE_TWIN_CALLBACK deviceTwinCallback;
     void* deviceTwinContextCallback;
+#ifdef USE_SDK_RETRY
     IOTHUB_CLIENT_RETRY_POLICY retryPolicy;
     size_t retryTimeoutLimitInSeconds;
+#endif
 #ifndef DONT_USE_UPLOADTOBLOB
     IOTHUB_CLIENT_LL_UPLOADTOBLOB_HANDLE uploadToBlobHandle;
 #endif
@@ -647,6 +649,7 @@ static IOTHUB_CLIENT_CORE_LL_HANDLE_DATA* initialize_iothub_client(const IOTHUB_
                             result->diagnostic_setting.currentMessageNumber = 0;
                             result->diagnostic_setting.diagSamplingPercentage = 0;
 #endif
+#ifdef USE_SDK_RETRY
                             /*Codes_SRS_IOTHUBCLIENT_LL_25_124: [ `IoTHubClientCore_LL_Create` shall set the default retry policy as Exponential backoff with jitter and if succeed and return a `non-NULL` handle. ]*/
                             if (IoTHubClientCore_LL_SetRetryPolicy(result, IOTHUB_CLIENT_RETRY_EXPONENTIAL_BACKOFF_WITH_JITTER, 0) != IOTHUB_CLIENT_OK)
                             {
@@ -665,6 +668,7 @@ static IOTHUB_CLIENT_CORE_LL_HANDLE_DATA* initialize_iothub_client(const IOTHUB_
                                 free(result);
                                 result = NULL;
                             }
+#endif
                         }
                     }
                 }
@@ -2083,6 +2087,7 @@ IOTHUB_CLIENT_RESULT IoTHubClientCore_LL_SetRetryPolicy(IOTHUB_CLIENT_CORE_LL_HA
         }
         else
         {
+#ifdef USE_SDK_RETRY
             if (handleData->IoTHubTransport_SetRetryPolicy(handleData->transportHandle, retryPolicy, retryTimeoutLimitInSeconds) != 0)
             {
                 result = IOTHUB_CLIENT_ERROR;
@@ -2096,6 +2101,11 @@ IOTHUB_CLIENT_RESULT IoTHubClientCore_LL_SetRetryPolicy(IOTHUB_CLIENT_CORE_LL_HA
                 handleData->retryTimeoutLimitInSeconds = retryTimeoutLimitInSeconds;
                 result = IOTHUB_CLIENT_OK;
             }
+#else
+            (void)retryPolicy;
+            (void)retryTimeoutLimitInSeconds;
+            result = IOTHUB_CLIENT_OK;
+#endif
         }
     }
     return result;
@@ -2113,10 +2123,11 @@ IOTHUB_CLIENT_RESULT IoTHubClientCore_LL_GetRetryPolicy(IOTHUB_CLIENT_CORE_LL_HA
     }
     else
     {
+#ifdef USE_SDK_RETRY
         IOTHUB_CLIENT_CORE_LL_HANDLE_DATA* handleData = (IOTHUB_CLIENT_CORE_LL_HANDLE_DATA*)iotHubClientHandle;
-
         *retryPolicy = handleData->retryPolicy;
         *retryTimeoutLimitInSeconds = handleData->retryTimeoutLimitInSeconds;
+#endif
         result = IOTHUB_CLIENT_OK;
     }
 
