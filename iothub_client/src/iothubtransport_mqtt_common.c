@@ -228,6 +228,9 @@ typedef struct MQTTTRANSPORT_HANDLE_DATA_TAG
     char* http_proxy_username;
     char* http_proxy_password;
     bool isProductInfoSet;
+
+    bool msg_send_complete;
+    uint16_t sync_send_packet_id;
 } MQTTTRANSPORT_HANDLE_DATA, *PMQTTTRANSPORT_HANDLE_DATA;
 
 #ifdef USE_TWIN_METHODS
@@ -1591,6 +1594,10 @@ static void mqtt_operation_complete_callback(MQTT_CLIENT_HANDLE handle, MQTT_CLI
                         }
                         currentListEntry = saveListEntry.Flink;
                     }
+                    if (puback->packetId == transport_data->sync_send_packet_id)
+                    {
+                        transport_data->msg_send_complete = true;
+                    }
                 }
                 else
                 {
@@ -2853,6 +2860,100 @@ IOTHUB_PROCESS_ITEM_RESULT IoTHubTransport_MQTT_Common_ProcessItem(TRANSPORT_LL_
 #endif
     return result;
 }
+
+static MQTT_MESSAGE_HANDLE construct_mqtt_message(PMQTTTRANSPORT_HANDLE_DATA transport_data, uint16_t packet_id, IOTHUB_MESSAGE_HANDLE event_handle)
+{
+    MQTT_MESSAGE_HANDLE result;
+    STRING_HANDLE msgTopic;
+    size_t len;
+    const unsigned char* payload = NULL;
+    if (!RetrieveMessagePayload(event_handle, &payload, &len))
+    {
+        LogError("Failure result from IoTHubMessage_GetData");
+        result = NULL;
+    }
+    else if ((msgTopic = addPropertiesTouMqttMessage(event_handle, STRING_c_str(transport_data->topic_MqttEvent), transport_data->auto_url_encode_decode)) == NULL)
+    {
+        LogError("Failed adding properties to mqtt message");
+        result = NULL;
+    }
+    else if ((result = mqttmessage_create(packet_id, STRING_c_str(msgTopic), DELIVER_AT_LEAST_ONCE, payload, len)) == NULL)
+    {
+        LogError("Failed adding properties to mqtt message");
+        result = NULL;
+        STRING_delete(msgTopic);
+    }
+    else
+    {
+        STRING_delete(msgTopic);
+    }
+    return result;
+}
+
+static bool ensure_connected(PMQTTTRANSPORT_HANDLE_DATA transport_data)
+{
+    bool result;
+    if (InitializeConnection(transport_data) != 0)
+    {
+        result = false;
+    }
+    else
+    {
+        do
+        {
+            mqtt_client_dowork(transport_data->mqttClient);
+            // TODO: add timeout
+        } while (transport_data->currPacketState != CONNACK_TYPE);
+        result = true;
+    }
+    return result;
+}
+
+int IoTHubTransport_MQTT_Common_SendMsg(IOTHUB_DEVICE_HANDLE handle, IOTHUB_MESSAGE_HANDLE event_handle, IOTHUB_CLIENT_CORE_LL_HANDLE iotHubClientHandle)
+{
+    int result;
+    PMQTTTRANSPORT_HANDLE_DATA transport_data = (PMQTTTRANSPORT_HANDLE_DATA)handle;
+    if (transport_data == NULL)
+    {
+        result = __FAILURE__;
+    }
+    else
+    {
+        // Hack alert that must die
+        transport_data->llClientHandle = iotHubClientHandle;
+
+        if (!ensure_connected(transport_data))
+        {
+            result = __FAILURE__;
+        }
+        else
+        {
+            transport_data->msg_send_complete = false;
+            MQTT_MESSAGE_HANDLE mqtt_msg;
+            transport_data->sync_send_packet_id = get_next_packet_id(transport_data);
+            if ((mqtt_msg = construct_mqtt_message(transport_data, transport_data->sync_send_packet_id, event_handle)) == NULL)
+            {
+                LogError("Failed constructing mqtt message");
+                result = __FAILURE__;
+            }
+            else if (mqtt_client_publish(transport_data->mqttClient, mqtt_msg) != 0)
+            {
+                LogError("Failed attempting to publish mqtt message");
+                result = __FAILURE__;
+            }
+            else
+            {
+                do
+                {
+                    mqtt_client_dowork(transport_data->mqttClient);
+                } while (!transport_data->msg_send_complete);
+                result = 0;
+            }
+        }
+    }
+    return result;
+}
+
 
 /* Codes_SRS_IOTHUB_MQTT_TRANSPORT_07_054: [ IoTHubTransport_MQTT_Common_DoWork shall subscribe to the Notification and get_state Topics if they are defined. ] */
 void IoTHubTransport_MQTT_Common_DoWork(TRANSPORT_LL_HANDLE handle, IOTHUB_CLIENT_CORE_LL_HANDLE iotHubClientHandle)

@@ -163,6 +163,10 @@ static void IotHubTransportMqtt_Unsubscribe_InputQueue(IOTHUB_DEVICE_HANDLE hand
     IoTHubTransport_MQTT_Common_Unsubscribe_InputQueue(handle);
 }
 
+static int IotHubTransportMqtt_SendMsg(IOTHUB_DEVICE_HANDLE handle, IOTHUB_MESSAGE_HANDLE eventMessageHandle, IOTHUB_CLIENT_CORE_LL_HANDLE iotHubClientHandle)
+{
+    return IoTHubTransport_MQTT_Common_SendMsg(handle, eventMessageHandle, iotHubClientHandle);
+}
 
 static TRANSPORT_PROVIDER myfunc = 
 {
@@ -185,7 +189,8 @@ static TRANSPORT_PROVIDER myfunc =
     IoTHubTransportMqtt_SetRetryPolicy,             /*pfIoTHubTransport_DoWork IoTHubTransport_SetRetryPolicy;*/
     IoTHubTransportMqtt_GetSendStatus,              /*pfIoTHubTransport_GetSendStatus IoTHubTransport_GetSendStatus;*/
     IotHubTransportMqtt_Subscribe_InputQueue,       /*pfIoTHubTransport_Subscribe_InputQueue IoTHubTransport_Subscribe_InputQueue; */
-    IotHubTransportMqtt_Unsubscribe_InputQueue      /*pfIoTHubTransport_Unsubscribe_InputQueue IoTHubTransport_Unsubscribe_InputQueue; */
+    IotHubTransportMqtt_Unsubscribe_InputQueue,      /*pfIoTHubTransport_Unsubscribe_InputQueue IoTHubTransport_Unsubscribe_InputQueue; */
+    IotHubTransportMqtt_SendMsg
 };
 
 /* Codes_SRS_IOTHUB_MQTT_TRANSPORT_07_022: [This function shall return a pointer to a structure of type TRANSPORT_PROVIDER */

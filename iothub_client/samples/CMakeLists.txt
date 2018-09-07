@@ -18,6 +18,7 @@ add_sample_directory(iothub_convenience_sample)
 add_sample_directory(iothub_ll_c2d_sample)
 add_sample_directory(iothub_ll_client_x509_sample)
 add_sample_directory(iothub_ll_telemetry_sample)
+add_sample_directory(iothub_ll_sync_sample)
 
 if(${use_http})
     if(NOT ${dont_use_uploadtoblob})

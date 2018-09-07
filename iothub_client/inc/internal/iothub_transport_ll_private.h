@@ -69,6 +69,7 @@ extern "C"
     typedef int(*pfIoTHubTransport_DeviceMethod_Response)(IOTHUB_DEVICE_HANDLE handle, METHOD_HANDLE methodId, const unsigned char* response, size_t response_size, int status_response);
     typedef int(*pfIoTHubTransport_Subscribe_InputQueue)(IOTHUB_DEVICE_HANDLE handle);
     typedef void(*pfIoTHubTransport_Unsubscribe_InputQueue)(IOTHUB_DEVICE_HANDLE handle);
+    typedef int (*pfIoTHubTransport_SendMsg)(IOTHUB_DEVICE_HANDLE handle, IOTHUB_MESSAGE_HANDLE eventMessageHandle, IOTHUB_CLIENT_CORE_LL_HANDLE iotHubClientHandle);
 
 #define TRANSPORT_PROVIDER_FIELDS                                                   \
 pfIotHubTransport_SendMessageDisposition IoTHubTransport_SendMessageDisposition;  \
@@ -90,7 +91,9 @@ pfIoTHubTransport_DoWork IoTHubTransport_DoWork;                                
 pfIoTHubTransport_SetRetryPolicy IoTHubTransport_SetRetryPolicy;                    \
 pfIoTHubTransport_GetSendStatus IoTHubTransport_GetSendStatus;                      \
 pfIoTHubTransport_Subscribe_InputQueue IoTHubTransport_Subscribe_InputQueue;        \
-pfIoTHubTransport_Unsubscribe_InputQueue IoTHubTransport_Unsubscribe_InputQueue     /*there's an intentional missing ; on this line*/
+pfIoTHubTransport_Unsubscribe_InputQueue IoTHubTransport_Unsubscribe_InputQueue;    \
+pfIoTHubTransport_SendMsg IoTHubTransport_SendMsg                                    
+/*there's an intentional missing ; on this line*/
 
     struct TRANSPORT_PROVIDER_TAG
     {

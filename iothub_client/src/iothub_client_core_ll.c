@@ -275,6 +275,7 @@ static void setTransportProtocol(IOTHUB_CLIENT_CORE_LL_HANDLE_DATA* handleData, 
     handleData->IoTHubTransport_DeviceMethod_Response = protocol->IoTHubTransport_DeviceMethod_Response;
     handleData->IoTHubTransport_Subscribe_InputQueue = protocol->IoTHubTransport_Subscribe_InputQueue;
     handleData->IoTHubTransport_Unsubscribe_InputQueue = protocol->IoTHubTransport_Unsubscribe_InputQueue;
+    handleData->IoTHubTransport_SendMsg = protocol->IoTHubTransport_SendMsg;
 }
 
 static void device_twin_data_destroy(IOTHUB_DEVICE_TWIN* client_item)
@@ -1429,12 +1430,17 @@ IOTHUB_CLIENT_RESULT IoTHubClientCore_LL_SendEvent(IOTHUB_CLIENT_CORE_LL_HANDLE 
     }
     else
     {
+        IOTHUB_CLIENT_CORE_LL_HANDLE_DATA* handleData = (IOTHUB_CLIENT_CORE_LL_HANDLE_DATA*)iotHubClientHandle;
+
         // Open connection if not already open
-            // IN PROTOCOL TRANSPORT
-            // Open 
-        // Send message to transport
-            // IN TRANSPORT
-        result = IOTHUB_CLIENT_INVALID_ARG;
+        if (handleData->IoTHubTransport_SendMsg(handleData->transportHandle, eventMessageHandle, handleData) != 0)
+        {
+            result = IOTHUB_CLIENT_ERROR;
+        }
+        else
+        {
+            result = IOTHUB_CLIENT_OK;
+        }
     }
     return result;
 }
