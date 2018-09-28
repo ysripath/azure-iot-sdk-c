@@ -2,7 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 // CAVEAT: This sample is to demonstrate azure IoT client concepts only and is not a guide design principles or style
-// Checking of return codes and error values shall be omitted for brevity.  Please practice sound engineering practices
+// Checking of return codes and error values shall be omitted for brevity.  Please practice sound engineering practices 
 // when writing production code.
 
 #include <stdio.h>
@@ -22,9 +22,9 @@
 //
 // The protocol you wish to use should be uncommented
 //
-#define SAMPLE_MQTT
+//#define SAMPLE_MQTT
 //#define SAMPLE_MQTT_OVER_WEBSOCKETS
-//#define SAMPLE_AMQP
+#define SAMPLE_AMQP
 //#define SAMPLE_AMQP_OVER_WEBSOCKETS
 //#define SAMPLE_HTTP
 
@@ -60,7 +60,7 @@ DEFINE_ENUM_STRINGS(PROV_DEVICE_RESULT, PROV_DEVICE_RESULT_VALUE);
 DEFINE_ENUM_STRINGS(PROV_DEVICE_REG_STATUS, PROV_DEVICE_REG_STATUS_VALUES);
 
 static const char* global_prov_uri = "global.azure-devices-provisioning.net";
-static const char* id_scope = "[ID Scope]";
+static const char* id_scope = "0ne0002B21C";
 
 static bool g_use_proxy = false;
 static const char* PROXY_ADDRESS = "127.0.0.1";
@@ -93,7 +93,7 @@ int main()
     // Used to initialize IoTHub SDK subsystem
     (void)IoTHub_Init();
     (void)prov_dev_security_init(hsm_type);
-
+    
     HTTP_PROXY_OPTIONS http_proxy;
     PROV_DEVICE_TRANSPORT_PROVIDER_FUNCTION prov_transport;
 

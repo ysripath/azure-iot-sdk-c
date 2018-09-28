@@ -22,9 +22,38 @@ int main()
 {
     int result = 0;
 
-    const char* connectionString = "[Connection String]";
-    const char* groupId = "[Group Id]";
-    const char* signingCertificate = "[Signing Certificate]";
+    const char* connectionString = "HostName=artikDPS.azure-devices-provisioning.net;SharedAccessKeyName=provisioningserviceowner;SharedAccessKey=BdkkdHSZ53kL9KoHsEpJ4xcY/RqVmIDn/PogoVWWaYA=";
+    const char* groupId = "artik-2";
+    const char* signingCertificate = "-----BEGIN CERTIFICATE-----\
+MIIFOjCCAyKgAwIBAgIJAK4hDNI3ZymfMA0GCSqGSIb3DQEBCwUAMCoxKDAmBgNV\
+BAMMH0F6dXJlIElvVCBIdWIgQ0EgQ2VydCBUZXN0IE9ubHkwHhcNMTgwOTI2MjEz\
+MzExWhcNMTgxMDI2MjEzMzExWjAqMSgwJgYDVQQDDB9BenVyZSBJb1QgSHViIENB\
+IENlcnQgVGVzdCBPbmx5MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA\
+xTuAE2punN2C1jiF8LYGF3OTlv/6BBoYQzjh9EiXr4PxT0Ize9da8xFNDtxDQwAE\
+T+fjH3c3yQXzHkFu5jt00/S9Rq7r7YUYeGPR1LpErNsr15Ch/lgYP0eLAbow9IAD\
+EQVkyYaBoFzwpktX4XC07DMHclXuwRHgV4SUYgXj1/S/jnWDSd+Qfr/oRxk3NAi8\
+6F4Yz7qGxldSwheIO+BNcfN9aQK/c/sFurB1QJAuAFzN5VUvzV+ZOtV3gV6Dm+iC\
+1z3Z/2nEzvVyQ2qBFkyHT2ySZTm9pkfjtpU9xeFfcHi5YKQt8hBYeJmPEwe9kHzj\
+YtrJv4IR1DS5w9T0ITFvT+vNDtF44RdqYZ8YNNZZ64u+DhjRj2kVc6ulfwZ7rpG8\
+KppgBMKTfKNPyC9JpLIXC4E/Xq3LwfkFX1a+Nie5FnG9LYqFlcA3kjI6PcARIA9X\
+xSLidz/dijoNlboKMqeRuO3ihr1gKVtEYiNSlkdFnT5Y7qsnVIw6P9YXLFsHbjAx\
+uwpCqseeDEwY10HTOThq7u8XRGCk87zDsbj66pqCUBPaUWG4VCZUcYGmlXVD0zh4\
+ODNd3IJTaFi/s3Xzws5zqS1dZwMZiAtZbDXLrnSioxhxjTmg3SQVBBLlHiFLcMwy\
+j/Cn2Pemj385kJEKP9wKBS2rnU3xXWH/yxkbzlt7rx0CAwEAAaNjMGEwHQYDVR0O\
+BBYEFDW0Z/s39lelE0vJcg002UsTG1FeMB8GA1UdIwQYMBaAFDW0Z/s39lelE0vJ\
+cg002UsTG1FeMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0PAQH/BAQDAgGGMA0GCSqG\
+SIb3DQEBCwUAA4ICAQDC0iTVJz80u83SjqGNZN+gu/bH6fLNgRCbEW8Q50ZhnKIz\
+hkDduc5SVlCAGfyofv2uRU6SKUtm01pSoqMECCfMaBJ4bC0AEo/sXTnV+TwUtS8B\
+iCNeSIgbkGC6yNGJp5ZFAoTN/Npabkw9mcAmI2kgnz+dOug9TuznvpSuMljqQCk6\
+FAoZPvOqvqRMBThuB8vepQo015n1hUlziUb49ct0zvObHEgcIbZvNHgVHT0WCJcM\
+4XxtlmPKd+TyQkBYj+ERsSAbiPL+Jgdp5Fi7P5GDyIIQc/4FkSKZHEj7QLJCGV3Y\
+lvpmbXhipEnNNHRIPUQjUnK6ikizlTAKO8HF1aKLjx24CiZQfBW6WZF3ynlG48Nw\
+AtbjYHo396UV/IPzSKm83gD/LaLJfnSzStPPRvWy2/IR0e/8paJcA9Wyls1Z23y7\
+V2AIxYQV7CRhHl7aL1ivJP/zTmxTgSCxnmYbEW0ROwtP2dzwnJJXicysKoOnNvzS\
+p1+sbmUdQLdFQb66EFHLSWSZIi0tY9iZpmafaJ0zsU1lsLDSz/aLy+ILcSwA/hDG\
+DlFA0JtZoXGZo3QS4NjfB8dDoy+4Psg+4sPf85gGSUBBded7ZFQKGMDP0fTK2c3F\
+2oK9xXFS0yQ+s/21jCbumzzDU3f4sVU8CyfImZzXOfzeUc5FU2ElbzE4WykxqQ==\
+-----END CERTIFICATE-----";
 
     const char* tags = "{\"key\":\"value\"}";
 
@@ -92,7 +121,7 @@ int main()
     /* ---Delete an Enrollment Group on the Provisioning Service--- */
     printf("Deleting an Enrollment Group on the Provisioning Service...\n");
 
-    prov_sc_delete_enrollment_group(prov_sc, eg_handle);
+    //prov_sc_delete_enrollment_group(prov_sc, eg_handle);
 
     /* ---Clean up handles--- */
     enrollmentGroup_destroy(eg_handle);
