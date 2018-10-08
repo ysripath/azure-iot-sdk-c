@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 #include "serializer.h"
 #include "iothub_client.h"
@@ -169,7 +170,6 @@ static int artik_firmware_update(void* param)
 
 		}
 	}
-
 	return ret;
 }
 
@@ -193,17 +193,28 @@ static ARTIK_DEVICE_DESIRED* parseFromJson(const char* json/*, DEVICE_TWIN_UPDAT
 	fwPackageURI = json_object_dotget_value(root_object, "desired.firmware.fwPackageURI");
 	fwPackageCheckValue = json_object_dotget_value(root_object, "desired.firmware.fwPackageCheckValue");
 
+	if (fwVersion == NULL && fwPackageURI == NULL && fwPackageCheckValue == NULL)
+	{
+		fwVersion = json_object_dotget_value(root_object, "firmware.fwVersion");
+		fwPackageURI = json_object_dotget_value(root_object, "firmware.fwPackageURI");
+		fwPackageCheckValue = json_object_dotget_value(root_object, "firmware.fwPackageCheckValue");
+
+	}
+
 	if (fwVersion == NULL || fwPackageURI == NULL || fwPackageCheckValue == NULL)
 		return NULL;
 	const char* data = json_value_get_string(fwVersion);
 	device->fwVersion = malloc(strlen(data)+1);
 	(void)strcpy(device->fwVersion, json_value_get_string(fwVersion));
+	free(fwVersion);
 
 	device->URI = malloc(strlen(json_value_get_string(fwPackageURI))+1);
 	(void)strcpy(device->URI, json_value_get_string(fwPackageURI));
+	free(fwPackageURI);
 
 	device->checkSum = malloc(strlen(json_value_get_string(fwPackageCheckValue))+1);
 	(void)strcpy(device->checkSum, json_value_get_string(fwPackageCheckValue));
+	free(fwPackageCheckValue);
 
 	return device;
 }
@@ -250,7 +261,8 @@ static void DeviceTwinCallback(DEVICE_TWIN_UPDATE_STATE update_state, const unsi
 
 			LogError("failed to start firmware update thread");
 		}
-
+		if (device != NULL)
+			free(device);
 	}
 	else
 	{
@@ -289,8 +301,9 @@ static void DeviceTwinCallback(DEVICE_TWIN_UPDATE_STATE update_state, const unsi
 		}
 
 		reportFlag = false;
+		if (device != NULL)
+			free(device);
 	}
-
 }
 
 #define FIRMWARE_UPDATE_METHOD_NAME "firmwareUpdate"
