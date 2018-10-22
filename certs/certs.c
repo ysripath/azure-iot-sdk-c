@@ -5,8 +5,50 @@
 
 #include "certs.h"
 
-const char certificates[] =
-/* DigiCert Baltimore Root */
+const char certificates[] = "-----BEGIN CERTIFICATE-----\r\n"
+		"MIIDcjCCAlqgAwIBAgIJAOPcxWjzOXTkMA0GCSqGSIb3DQEBCwUAME4xCzAJBgNV\r\n"
+		"BAYTAnVzMQswCQYDVQQIDAJ1czELMAkGA1UEBwwCdXMxCzAJBgNVBAoMAnVzMQsw\r\n"
+		"CQYDVQQLDAJ1czELMAkGA1UEAwwCdXMwHhcNMTgxMDE2MjIzNzA5WhcNMTgxMTE1\r\n"
+		"MjIzNzA5WjBOMQswCQYDVQQGEwJ1czELMAkGA1UECAwCdXMxCzAJBgNVBAcMAnVz\r\n"
+		"MQswCQYDVQQKDAJ1czELMAkGA1UECwwCdXMxCzAJBgNVBAMMAnVzMIIBIjANBgkq\r\n"
+		"hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxFWJNFGAeQM3CqhQGsiPqt62pivMABbu\r\n"
+		"qMVikanLXmnMwaaZ9B0A1mRXHHf8lTk4cN67OAo9uYc0CcNj0A3AZtQqCYSwwo5o\r\n"
+		"IObY6VvfqQrvZwhlKvDAz4bEN8LFvBQNjTFgymeIczXXvWIBchbs7fguleL/o4Wd\r\n"
+		"cD8Qed2JYin1hlK2ikDf5UQtSuPtTQsOOOpzHI56rFFWlH3WRYXv/EItxl4SJ7bn\r\n"
+		"w6Xp1e7I6g0OkU+Q1AUy+pIyyacBuypg5FKw0IX+bxRCCBFgwRuVHH9Y7BySypRI\r\n"
+		"JDUov5DaEV9UOPjRDR3JRR4H96BrXlLM2A263WL23q06Nm5lF0lusQIDAQABo1Mw\r\n"
+		"UTAdBgNVHQ4EFgQU3CzGViczKytMuGGC2XjYQ7iElmcwHwYDVR0jBBgwFoAU3CzG\r\n"
+		"ViczKytMuGGC2XjYQ7iElmcwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsF\r\n"
+		"AAOCAQEADFuWsLSrLUSiLz9bMIfs3sCMuNM17t8/FNSwrsxgIq+Dly1Kj05NIxCw\r\n"
+		"w+SOc/1DhiyhbBCPVDI2kYX8HQO9Hvlt2WdlkRHUUx1EWiKFvLHfvHeUHFJqlvM3\r\n"
+		"qrG0fqdpamsHsy1Imefrqs+fsK8Pl227gAxfef0/JXdeOirz/In9kD764QeJwT+L\r\n"
+		"BNqJt74Zlwh5USOtp5TYtnwclxDmm4xkgRrcyIw9XCzYbJT/VV22nJ3tH7TDYnQ2\r\n"
+		"vKwW9cDJRhp/Ahkm+nGCvSNhHdRe3E1FOr6pehvzh1EzkfnXg0zvBqMTwwgN/R1X\r\n"
+		"b8lCa0LDW/xcQx3vqazS7iIdqISbog==\r\n"
+		"-----END CERTIFICATE-----\r\n"
+		"-----BEGIN CERTIFICATE-----\r\n"
+		"MIIDJTCCAg0CCQD5mSgFJcN3/jANBgkqhkiG9w0BAQsFADBOMQswCQYDVQQGEwJ1\r\n"
+		"czELMAkGA1UECAwCdXMxCzAJBgNVBAcMAnVzMQswCQYDVQQKDAJ1czELMAkGA1UE\r\n"
+		"CwwCdXMxCzAJBgNVBAMMAnVzMB4XDTE4MTAxODIxNDUzOVoXDTIxMDgwNzIxNDUz\r\n"
+		"OVowWzELMAkGA1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoM\r\n"
+		"GEludGVybmV0IFdpZGdpdHMgUHR5IEx0ZDEUMBIGA1UEAwwLYXJ0aWtkZXZpY2Uw\r\n"
+		"ggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDvxYH2adih/rAZXBT4jdQG\r\n"
+		"74LKOun3QaF++S7ws1JECabsKBfvFGipxpn12WSgrg3LF1wV3iU4gvnrxyEXwcNs\r\n"
+		"4Y0sIiu+U3pTnBQ5QUP2GliXEMemH9YJoq/EJpQqjrvrYX+hx78CdFiDtK/wwHkX\r\n"
+		"pW2RXnqKjaZso5FmCYo5wUDklGYzALIKjy5gYhZUlp4L3xq7G6lHkHO1qzuDHyqz\r\n"
+		"iA5pu1KxXaqd395jjvyfY0EfLKV7oO1eZterP8GbsXxD2KLZiEE1uFKpRbl2ZOfP\r\n"
+		"uu6FvY0cez0qMjWOT3CRvGWYbBmARRDIFZSAax78L8ofBguO9BZEii2B7+62C73j\r\n"
+		"AgMBAAEwDQYJKoZIhvcNAQELBQADggEBAAFo/LCJVkRIklhNgKdD9gRYQGzqxHqy\r\n"
+		"KjuZUkrKOYyx1DNRnKMC5c5ZZhsmsi+FU7aNIiqKGWaVleEBl10GX2iq0/Q+NS7E\r\n"
+		"vW23C3TbYAZ+k9ZS7/eXlDWpwdb5KNh68sdbVPNdLjEyRYhZC/6hlQKgfI9IA+5i\r\n"
+		"OTw3QfJBvp6iLE8CtKYLNzRiVOgrEKwcubwodZGg9YOfdGtc5+qyJlmMIUDkXhqv\r\n"
+		"VZVC7dR3svw2EIpY0VAV7AJ3H5Kd65PXu7stgJEqBjdih9/mgHpZlzTycR2Z/ucO\r\n"
+		"wvlqdZ3qnUQd78GFVe03I5EXKQj5BOuHbfrEaO0KUjUq9mnSggGVr+Y=\r\n"
+		"-----END CERTIFICATE-----\r\n";
+
+
+/*const char certificates[] =
+// DigiCert Baltimore Root
 "-----BEGIN CERTIFICATE-----\r\n"
 "MIIDdzCCAl+gAwIBAgIEAgAAuTANBgkqhkiG9w0BAQUFADBaMQswCQYDVQQGEwJJ\r\n"
 "RTESMBAGA1UEChMJQmFsdGltb3JlMRMwEQYDVQQLEwpDeWJlclRydXN0MSIwIAYD\r\n"
@@ -28,7 +70,7 @@ const char certificates[] =
 "ksLi4xaNmjICq44Y3ekQEe5+NauQrz4wlHrQMz2nZQ/1/I6eYs9HRCwBXbsdtTLS\r\n"
 "R9I4LtD+gdwyah617jzV/OeBHRnDJELqYzmp\r\n"
 "-----END CERTIFICATE-----\r\n"
-/*DigiCert Global Root CA*/
+//DigiCert Global Root CA
 "-----BEGIN CERTIFICATE-----\r\n"
 "MIIDrzCCApegAwIBAgIQCDvgVpBCRrGhdWrJWZHHSjANBgkqhkiG9w0BAQUFADBh\r\n"
 "MQswCQYDVQQGEwJVUzEVMBMGA1UEChMMRGlnaUNlcnQgSW5jMRkwFwYDVQQLExB3\r\n"
@@ -51,7 +93,7 @@ const char certificates[] =
 "YSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQk\r\n"
 "CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=\r\n"
 "-----END CERTIFICATE-----\r\n"
-/*D-TRUST Root Class 3 CA 2 2009*/
+//D-TRUST Root Class 3 CA 2 2009
 "-----BEGIN CERTIFICATE-----\r\n"
 "MIIEMzCCAxugAwIBAgIDCYPzMA0GCSqGSIb3DQEBCwUAME0xCzAJBgNVBAYTAkRF\r\n"
 "MRUwEwYDVQQKDAxELVRydXN0IEdtYkgxJzAlBgNVBAMMHkQtVFJVU1QgUm9vdCBD\r\n"
@@ -77,7 +119,7 @@ const char certificates[] =
 "PIWmawomDeCTmGCufsYkl4phX5GOZpIJhzbNi5stPvZR1FDUWSi9g/LMKHtThm3Y\r\n"
 "Johw1+qRzT65ysCQblrGXnRl11z+o+I=\r\n"
 "-----END CERTIFICATE-----\r\n"
-/*WoSign*/
+//WoSign
 "-----BEGIN CERTIFICATE-----\r\n"
 "MIIFdjCCA16gAwIBAgIQXmjWEXGUY1BWAGjzPsnFkTANBgkqhkiG9w0BAQUFADBV\r\n"
 "MQswCQYDVQQGEwJDTjEaMBgGA1UEChMRV29TaWduIENBIExpbWl0ZWQxKjAoBgNV\r\n"
@@ -111,4 +153,4 @@ const char certificates[] =
 "ee5Ehr7XHuQe+w==\r\n"
 "-----END CERTIFICATE-----\r\n"
 
-;
+;*/
